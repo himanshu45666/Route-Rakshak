@@ -1,0 +1,125 @@
+const detectEmergencyType = async (req, res) => {
+  try {
+    const { description } = req.body;
+
+    if (!description || description.trim() === "") {
+      return res.status(400).json({
+        message: "Description is required",
+      });
+    }
+
+    const response = await fetch(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "llama-3.1-8b-instant",
+          messages: [
+            {
+              role: "system",
+              content:
+                "You are an emergency classifier for a road safety app. Based on the driver's description, classify the emergency into EXACTLY ONE of these categories: Naxal Attack, Landslide, Accident, Medical Emergency, Fire. Reply with ONLY the category name, nothing else.",
+            },
+            {
+              role: "user",
+              content: description,
+            },
+          ],
+          temperature: 0.2,
+          max_tokens: 10,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.log("Groq API Error:", data);
+      return res.status(500).json({
+        message: "AI service error",
+      });
+    }
+
+    const emergencyType = data.choices[0].message.content.trim();
+
+    res.status(200).json({
+      emergencyType,
+    });
+  } catch (error) {
+    console.log("AI Controller Error:", error);
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+const chatWithAI = async (req, res) => {
+  try {
+    const { message, history } = req.body;
+
+    if (!message || message.trim() === "") {
+      return res.status(400).json({
+        message: "Message is required",
+      });
+    }
+
+    const conversationHistory = (history || []).map((msg) => ({
+      role: msg.sender === "user" ? "user" : "assistant",
+      content: msg.text,
+    }));
+
+    const response = await fetch(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "llama-3.1-8b-instant",
+          messages: [
+            {
+              role: "system",
+              content:
+                "You are a helpful safety assistant for Route Rakshak, an emergency response app for drivers on Indian highways. Answer questions about road safety, emergency procedures, first aid basics, and general driving safety tips. Keep answers short (2-4 sentences), practical, and clear. If asked something unrelated to safety/driving, politely redirect to safety topics.",
+            },
+            ...conversationHistory,
+            {
+              role: "user",
+              content: message,
+            },
+          ],
+          temperature: 0.5,
+          max_tokens: 200,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.log("Groq API Error:", data);
+      return res.status(500).json({
+        message: "AI service error",
+      });
+    }
+
+    const reply = data.choices[0].message.content.trim();
+
+    res.status(200).json({
+      reply,
+    });
+  } catch (error) {
+    console.log("Chat Controller Error:", error);
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+module.exports = { detectEmergencyType, chatWithAI };

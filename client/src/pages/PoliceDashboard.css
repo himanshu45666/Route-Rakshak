@@ -1,0 +1,232 @@
+.police-container {
+  min-height: 100vh;
+  padding: 60px 20px 40px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.police-card {
+  width: 90%;
+  max-width: 900px;
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  padding-top: 40px;
+  margin: 0 auto;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  position: relative;
+  text-align: center;
+}
+
+.police-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.police-title {
+  margin: 0;
+  font-size: 42px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.police-logout-btn {
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.25s;
+}
+
+.police-logout-btn:hover {
+  background: #b91c1c;
+  transform: translateY(-2px);
+}
+
+/* Stat cards */
+.stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 25px 0 35px;
+}
+
+.stat-card {
+  color: white;
+  padding: 22px 20px;
+  border-radius: 16px;
+  min-width: 170px;
+  flex: 1;
+  max-width: 220px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transition: 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+}
+
+.stat-card h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.stat-card h1 {
+  margin: 8px 0 0;
+  font-size: 34px;
+}
+
+.stat-total { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+.stat-pending { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.stat-accepted { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.stat-resolved { background: linear-gradient(135deg, #22c55e, #16a34a); }
+
+/* No active emergency */
+.no-emergency {
+  margin-top: 30px;
+  padding: 25px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 16px;
+}
+
+.no-emergency h2 {
+  color: #16a34a;
+  margin: 0 0 8px;
+}
+
+.no-emergency p {
+  color: #555;
+  margin: 0;
+}
+
+/* Emergency Alert */
+.emergency-alert {
+  margin-top: 20px;
+  padding: 25px;
+  background: #fef2f2;
+  border: 2px solid #fecaca;
+  border-radius: 16px;
+  animation: pulse 2s infinite;
+  text-align: left;
+}
+
+.emergency-alert h2 {
+  color: #dc2626;
+  text-align: center;
+  margin-top: 0;
+}
+
+.emergency-alert p {
+  font-size: 16px;
+  color: #1e293b;
+  margin: 8px 0;
+}
+
+.alert-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+  justify-content: center;
+}
+
+.alert-actions button {
+  padding: 12px 22px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
+  color: white;
+}
+
+.alert-actions button:hover {
+  transform: translateY(-2px);
+}
+
+.btn-accept { background: #f59e0b; }
+.btn-accept.accepted { background: #16a34a; }
+.btn-map { background: #2563eb; }
+.btn-resolve { background: #dc2626; }
+
+/* History Table */
+.history-section {
+  margin-top: 45px;
+  text-align: left;
+}
+
+.history-section h2 {
+  margin-bottom: 18px;
+  color: #0f172a;
+}
+
+.history-table-wrapper {
+  overflow-x: auto;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  background: white;
+}
+
+.history-table thead {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+}
+
+.history-table th,
+.history-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.history-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.status-badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  color: white;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.status-Pending { background: #dc2626; }
+.status-Accepted { background: #f59e0b; }
+.status-Resolved { background: #16a34a; }
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.01); }
+  100% { transform: scale(1); }
+}
+
+.map-section {
+  margin-top: 30px;
+  padding: 20px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  text-align: left;
+}
+
+.map-section h2 {
+  margin: 0 0 15px;
+  color: #0f172a;
+  text-align: center;
+}
