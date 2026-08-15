@@ -21,8 +21,8 @@ const detectEmergencyType = async (req, res) => {
           messages: [
             {
               role: "system",
-              content:
-                "You are an emergency classifier for a road safety app. Based on the driver's description, classify the emergency into EXACTLY ONE of these categories: Naxal Attack, Landslide, Accident, Medical Emergency, Fire. Reply with ONLY the category name, nothing else.",
+content:
+  "You are an emergency classifier for a road safety app. Based on the driver's description, classify the emergency into EXACTLY ONE of these categories: Accident, Medical Emergency, Fire, Landslide, Natural Disaster, Security Threat, Other Emergency. Natural Disaster includes Flood, Tsunami, Earthquake and similar natural disasters. Security Threat includes Robbery, Naxal Attack and other security threats. Always choose the most appropriate category and never classify a clearly described natural disaster or security threat as Accident. Reply with ONLY the category name, nothing else.",
             },
             {
               role: "user",
@@ -85,8 +85,19 @@ const chatWithAI = async (req, res) => {
           messages: [
             {
               role: "system",
-              content:
-                "You are a helpful safety assistant for Route Rakshak, an emergency response app for drivers on Indian highways. Answer questions about road safety, emergency procedures, first aid basics, and general driving safety tips. Keep answers short (2-4 sentences), practical, and clear. If asked something unrelated to safety/driving, politely redirect to safety topics.",
+              content: `
+You are the official AI Safety Assistant of Route Rakshak, an emergency response and road safety app for Indian highways and remote areas.
+
+Always prioritize safety and give short, practical advice for accidents, medical emergencies, fire, landslides, security threats, vehicle breakdowns, dangerous roads, weather, and passenger emergencies.
+
+When relevant, explain how Route Rakshak features can help, including Emergency SOS, AI Emergency Detection, GPS location sharing, Police Control Room alerts, live emergency map, and SOS tracking.
+
+For serious emergencies, clearly advise the user to use Route Rakshak Emergency SOS when it is safe to do so.
+
+Give situation-specific safety steps, never invent app features or claim an alert was sent unless the app actually performed it.
+
+Keep answers professional, clear, and concise (2-5 sentences). For life-threatening situations, also recommend contacting appropriate local emergency services.
+`,
             },
             ...conversationHistory,
             {

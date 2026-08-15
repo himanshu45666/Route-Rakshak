@@ -79,12 +79,14 @@ socketRef.current = io(BASE_URL);
       const detectedType = response.data.emergencyType;
 
       const validTypes = [
-        "Naxal Attack",
-        "Landslide",
-        "Accident",
-        "Medical Emergency",
-        "Fire",
-      ];
+  "Accident",
+  "Medical Emergency",
+  "Fire",
+  "Landslide",
+  "Natural Disaster",
+  "Security Threat",
+  "Other Emergency",
+];
 
       if (validTypes.includes(detectedType)) {
         setEmergencyType(detectedType);
@@ -227,11 +229,13 @@ socketRef.current = io(BASE_URL);
   value={emergencyType}
   onChange={(e) => setEmergencyType(e.target.value)}
 >
-  <option value="Naxal Attack">🚨 Naxal Attack</option>
-  <option value="Landslide">⛰ Landslide</option>
   <option value="Accident">🚗 Accident</option>
-  <option value="Medical Emergency">🏥 Medical Emergency</option>
-  <option value="Fire">🔥 Fire</option>
+<option value="Medical Emergency">🏥 Medical Emergency</option>
+<option value="Fire">🔥 Fire</option>
+<option value="Landslide">⛰️ Landslide</option>
+<option value="Natural Disaster">🌊 Natural Disaster</option>
+<option value="Security Threat">🚨 Security Threat</option>
+<option value="Other Emergency">⚠️ Other Emergency</option>
 </select>
 </div>
 <ChatWidget />
