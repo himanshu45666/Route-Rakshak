@@ -59,7 +59,7 @@ Keep answers clear, practical, and concise.
             },
           ],
           temperature: 0.2,
-          max_tokens: 10,
+        max_tokens: 100, 
         }),
       }
     );
