@@ -44,7 +44,26 @@ content:
       });
     }
 
-    const emergencyType = data.choices[0].message.content.trim();
+   const rawType = data.choices[0].message.content.trim();
+
+const validTypes = [
+  "Accident",
+  "Medical Emergency",
+  "Fire",
+  "Landslide",
+  "Natural Disaster",
+  "Security Threat",
+  "Other Emergency",
+];
+
+const cleanType = rawType
+  .replace(/[*_`."']/g, "")
+  .trim();
+
+const emergencyType =
+  validTypes.find(
+    (type) => type.toLowerCase() === cleanType.toLowerCase()
+  ) || "Other Emergency";
 
     res.status(200).json({
       emergencyType,
