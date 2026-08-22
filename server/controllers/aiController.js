@@ -8,6 +8,62 @@ const detectEmergencyType = async (req, res) => {
       });
     }
 
+        const text = description.toLowerCase().trim();
+
+    // ACCIDENT
+    if (
+      text.includes("accident") ||
+      text.includes("gaadi thuk") ||
+      text.includes("car thuk") ||
+      text.includes("bus thuk") ||
+      text.includes("truck thuk") ||
+      text.includes("takkar") ||
+      text.includes("takra") ||
+      text.includes("crash") ||
+      text.includes("collision")
+    ) {
+      return res.status(200).json({
+        emergencyType: "Accident",
+      });
+    }
+
+    // FLOOD / NATURAL DISASTER
+    if (
+      text.includes("flood") ||
+      text.includes("flooding") ||
+      text.includes("baadh") ||
+      text.includes("बाढ़")
+    ) {
+      return res.status(200).json({
+        emergencyType: "Natural Disaster",
+      });
+    }
+
+    // FIRE
+    if (
+      text.includes("fire") ||
+      text.includes("aag") ||
+      text.includes("आग") ||
+      text.includes("burning")
+    ) {
+      return res.status(200).json({
+        emergencyType: "Fire",
+      });
+    }
+
+    // LANDSLIDE
+    if (
+      text.includes("landslide") ||
+      text.includes("land slide") ||
+      text.includes("mudslide") ||
+      text.includes("pahad gir") ||
+      text.includes("pathar gir")
+    ) {
+      return res.status(200).json({
+        emergencyType: "Landslide",
+      });
+    }
+
     const response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
