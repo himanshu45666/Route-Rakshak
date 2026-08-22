@@ -8,12 +8,30 @@ const authRoutes = require("./routes/authRoutes");
 const policeRoutes = require("./routes/policeRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: process.env.FRONTEND_URL,
-    methods: ["GET", "POST"],
+
+const allowedOrigins = [
+  "https://route-rakshak-black.vercel.app",
+  /^https:\/\/route-rakshak-.*-himanshu45666s-projects\.vercel\.app$/
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+
+    const allowed = allowedOrigins.some((item) =>
+      item instanceof RegExp ? item.test(origin) : item === origin
+    );
+
+    callback(null, allowed);
   },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true
+};
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: corsOptions
 });
 io.on("connection", (socket) => {
   console.log("🟢 New Client Connected:", socket.id);
@@ -31,11 +49,7 @@ io.on("connection", (socket) => {
 const sosRoutes = require("./routes/sosRoutes");
 const aiRoutes = require("./routes/aiRoutes");
 
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL,
-  })
-);
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/sos", sosRoutes);
