@@ -11,28 +11,39 @@ function AdminLogin() {
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-    try {
-      const response = await axios.post(
-  `${BASE_URL}/api/admin/login`,
-  {
-    username,
-    password,
+  try {
+    console.log("BASE_URL:", BASE_URL);
+    console.log("Admin login request started");
+
+    const response = await axios.post(
+      `${BASE_URL}/api/admin/login`,
+      {
+        username,
+        password,
+      }
+    );
+
+    console.log("STATUS:", response.status);
+    console.log("RESPONSE:", response.data);
+
+    localStorage.setItem("adminToken", response.data.token);
+    localStorage.setItem(
+      "admin",
+      JSON.stringify(response.data.admin)
+    );
+
+    window.location.href = "/admin";
+
+  } catch (error) {
+    console.log("LOGIN ERROR:", error);
+    console.log("ERROR STATUS:", error.response?.status);
+    console.log("ERROR DATA:", error.response?.data);
+
+    alert(
+      error.response?.data?.message || "Login Failed"
+    );
   }
-);
-
-      localStorage.setItem("adminToken", response.data.token);
-      localStorage.setItem(
-        "admin",
-        JSON.stringify(response.data.admin)
-      );
-
-      navigate("/admin");
-    } catch (error) {
-      alert(
-        error.response?.data?.message || "Login Failed"
-      );
-    }
-  };
+};
 
   return (
     <div className="login-container">
