@@ -195,8 +195,9 @@ IMPORTANT:
               content: message,
             },
           ],
-          temperature: 0.5,
-          max_tokens: 200,
+         temperature: 0.2,
+max_completion_tokens: 100,
+reasoning_effort: "low",
         }),
       }
     );
