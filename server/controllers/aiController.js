@@ -8,62 +8,7 @@ const detectEmergencyType = async (req, res) => {
       });
     }
 
-        const text = description.toLowerCase().trim();
-
-    // ACCIDENT
-    if (
-      text.includes("accident") ||
-      text.includes("gaadi thuk") ||
-      text.includes("car thuk") ||
-      text.includes("bus thuk") ||
-      text.includes("truck thuk") ||
-      text.includes("takkar") ||
-      text.includes("takra") ||
-      text.includes("crash") ||
-      text.includes("collision")
-    ) {
-      return res.status(200).json({
-        emergencyType: "Accident",
-      });
-    }
-
-    // FLOOD / NATURAL DISASTER
-    if (
-      text.includes("flood") ||
-      text.includes("flooding") ||
-      text.includes("baadh") ||
-      text.includes("बाढ़")
-    ) {
-      return res.status(200).json({
-        emergencyType: "Natural Disaster",
-      });
-    }
-
-    // FIRE
-    if (
-      text.includes("fire") ||
-      text.includes("aag") ||
-      text.includes("आग") ||
-      text.includes("burning")
-    ) {
-      return res.status(200).json({
-        emergencyType: "Fire",
-      });
-    }
-
-    // LANDSLIDE
-    if (
-      text.includes("landslide") ||
-      text.includes("land slide") ||
-      text.includes("mudslide") ||
-      text.includes("pahad gir") ||
-      text.includes("pathar gir")
-    ) {
-      return res.status(200).json({
-        emergencyType: "Landslide",
-      });
-    }
-
+        
     const response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
@@ -77,8 +22,36 @@ const detectEmergencyType = async (req, res) => {
           messages: [
             {
               role: "system",
-content:
-  "You are an emergency classifier for a road safety app. Based on the driver's description, classify the emergency into EXACTLY ONE of these categories: Accident, Medical Emergency, Fire, Landslide, Natural Disaster, Security Threat, Other Emergency. Natural Disaster includes Flood, Tsunami, Earthquake and similar natural disasters. Security Threat includes Robbery, Naxal Attack and other security threats. Always choose the most appropriate category and never classify a clearly described natural disaster or security threat as Accident. Reply with ONLY the category name, nothing else.",
+content:`
+You are the official AI Safety Assistant of Route Rakshak,
+an emergency response and road safety app for Indian highways
+and remote areas.
+
+The user may communicate in English, Hindi, Hinglish,
+or informal language.
+
+Always prioritize safety and give short, practical advice.
+
+Help users with accidents, medical emergencies, fire,
+landslides, floods, natural disasters, security threats,
+vehicle breakdowns, dangerous roads, and passenger emergencies.
+
+When relevant, explain how Route Rakshak features can help,
+including Emergency SOS, AI Emergency Detection, GPS location
+sharing, Police Control Room alerts, live emergency map,
+and SOS tracking.
+
+For serious emergencies, advise the user to use Route Rakshak
+Emergency SOS when it is safe to do so.
+
+Never claim that an alert was sent unless the application
+actually performed that action.
+
+Do not classify the user's message unless they specifically
+ask for emergency classification.
+
+Keep answers clear, practical, and concise.
+`,
             },
             {
               role: "user",
@@ -113,12 +86,13 @@ const validTypes = [
 ];
 
 const cleanType = rawType
-  .replace(/[*_`."']/g, "")
+  .replace(/[*_`."'():-]/g, " ")
+  .replace(/\s+/g, " ")
   .trim();
 
 const emergencyType =
   validTypes.find(
-    (type) => type.toLowerCase() === cleanType.toLowerCase()
+    (type) => cleanType.toLowerCase().includes(type.toLowerCase())
   ) || "Other Emergency";
 
     res.status(200).json({
@@ -161,17 +135,55 @@ const chatWithAI = async (req, res) => {
             {
               role: "system",
               content: `
-You are the official AI Safety Assistant of Route Rakshak, an emergency response and road safety app for Indian highways and remote areas.
+You are an emergency classification system for an Indian road safety application.
 
-Always prioritize safety and give short, practical advice for accidents, medical emergencies, fire, landslides, security threats, vehicle breakdowns, dangerous roads, weather, and passenger emergencies.
+The user may describe an emergency in English, Hindi, Hinglish,
+short sentences, slang, spelling mistakes, or grammatically incorrect language.
 
-When relevant, explain how Route Rakshak features can help, including Emergency SOS, AI Emergency Detection, GPS location sharing, Police Control Room alerts, live emergency map, and SOS tracking.
+Understand the MEANING of the complete sentence, not just exact keywords.
 
-For serious emergencies, clearly advise the user to use Route Rakshak Emergency SOS when it is safe to do so.
+Classify the situation into EXACTLY ONE category:
 
-Give situation-specific safety steps, never invent app features or claim an alert was sent unless the app actually performed it.
+Accident
+Medical Emergency
+Fire
+Landslide
+Natural Disaster
+Security Threat
+Other Emergency
 
-Keep answers professional, clear, and concise (2-5 sentences). For life-threatening situations, also recommend contacting appropriate local emergency services.
+Examples:
+
+"gaadi thuk gayi" -> Accident
+"car takra gayi" -> Accident
+"accident ho gaya" -> Accident
+"bus ka accident ho gaya" -> Accident
+
+"attack ho raha hai" -> Security Threat
+"hamla ho gaya" -> Security Threat
+"robbery ho rahi hai" -> Security Threat
+
+"flood aa gaya" -> Natural Disaster
+"baadh aa gayi" -> Natural Disaster
+"earthquake aa gaya" -> Natural Disaster
+
+"aag lag gayi" -> Fire
+"bus mein fire lag gayi" -> Fire
+
+"pahad se mitti gir rahi hai" -> Landslide
+
+"passenger behosh hai" -> Medical Emergency
+"passenger ko bahut bleeding ho rahi hai" -> Medical Emergency
+
+IMPORTANT:
+- Understand Hindi and Hinglish.
+- Understand spelling mistakes and informal language.
+- Use the meaning and context.
+- If a vehicle collision/crash is described, choose Accident.
+- If an attack/robbery/violent threat is described, choose Security Threat.
+- If flood/earthquake/cyclone/other natural event is described, choose Natural Disaster.
+- Never explain your answer.
+- Return ONLY the category name.
 `,
             },
             ...conversationHistory,
