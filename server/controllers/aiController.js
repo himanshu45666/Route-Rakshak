@@ -75,6 +75,9 @@ Keep answers clear, practical, and concise.
 
    const rawType = data.choices[0].message.content.trim();
 
+    console.log("AI EMERGENCY INPUT:", description);
+console.log("AI EMERGENCY RAW RESPONSE:", rawType);
+
 const validTypes = [
   "Accident",
   "Medical Emergency",
